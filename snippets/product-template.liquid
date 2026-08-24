@@ -366,6 +366,7 @@
                   {%- when 'buy_buttons' -%}
                     <div class="product-block" {{ block.shopify_attributes }}>
                       {%- unless product.empty? -%}
+                        {%- render 'kopstorm-snippet-1', product: product -%}
                         <div class="product-block">
                           {%- render 'product-form',
                             form_id: form_id,
