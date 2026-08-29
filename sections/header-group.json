@@ -43,14 +43,6 @@
     "announcement": {
       "type": "announcement",
       "blocks": {
-        "announcement_EpfFaT": {
-          "type": "announcement",
-          "settings": {
-            "text": "FREE SHIPPING AUSTRALIA-WIDE",
-            "link_text": "",
-            "link": ""
-          }
-        },
         "announcement-1": {
           "type": "announcement",
           "settings": {
@@ -58,11 +50,19 @@
             "link_text": "",
             "link": ""
           }
+        },
+        "announcement_EpfFaT": {
+          "type": "announcement",
+          "settings": {
+            "text": "FREE SHIPPING AUSTRALIA-WIDE",
+            "link_text": "",
+            "link": ""
+          }
         }
       },
       "block_order": [
-        "announcement_EpfFaT",
-        "announcement-1"
+        "announcement-1",
+        "announcement_EpfFaT"
       ],
       "settings": {
         "announcement_compact": true
