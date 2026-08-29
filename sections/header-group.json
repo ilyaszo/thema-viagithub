@@ -43,6 +43,14 @@
     "announcement": {
       "type": "announcement",
       "blocks": {
+        "announcement_hV3tJK": {
+          "type": "announcement",
+          "settings": {
+            "text": "30-DAY MONEY-BACK GUARANTEE",
+            "link_text": "",
+            "link": ""
+          }
+        },
         "announcement-1": {
           "type": "announcement",
           "settings": {
@@ -61,6 +69,7 @@
         }
       },
       "block_order": [
+        "announcement_hV3tJK",
         "announcement-1",
         "announcement_EpfFaT"
       ],
