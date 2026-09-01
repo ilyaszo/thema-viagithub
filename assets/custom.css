@@ -515,7 +515,7 @@ button[class*="kiwi"],
   letter-spacing: 0.3em;
 }
 
-/* Potlood-icoon staat links van de tekst, alleen de tekst is onderlijnd. */
+/* Meetlat-icoon staat links van de tekst, alleen de tekst is onderlijnd. */
 .size-chart__standalone .tool-tip-trigger .icon,
 .variant__label-size-chart .tool-tip-trigger .icon {
   height: 20px;
