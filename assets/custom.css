@@ -480,6 +480,7 @@ button[class*="kiwi"],
   }
 }
 
+
 /* ================================
    PRODUCT: SIZE CHART NAAST HET 'SIZE' LABEL
 ================================ */
@@ -514,8 +515,17 @@ button[class*="kiwi"],
   letter-spacing: 0.3em;
 }
 
+/* Potlood-icoon staat links van de tekst, alleen de tekst is onderlijnd. */
+.size-chart__standalone .tool-tip-trigger .icon,
 .variant__label-size-chart .tool-tip-trigger .icon {
-  height: 22px;
-  width: 22px;
-  margin-left: var(--sizeChartIconMargin, 4px);
+  height: 20px;
+  width: 20px;
+  flex: 0 0 auto;
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+.size-chart__link-text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
