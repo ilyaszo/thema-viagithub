@@ -481,13 +481,16 @@ button[class*="kiwi"],
 }
 
 
+
 /* ================================
    PRODUCT: SIZE CHART NAAST HET 'SIZE' LABEL
 ================================ */
 
+/* Baseline-uitlijning: de tekst 'SIZE CHART' staat op exact dezelfde
+   schrijflijn als het woord 'SIZE', ondanks het kleinere lettertype. */
 .variant__label--size-chart[for] {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
 }
@@ -501,28 +504,32 @@ button[class*="kiwi"],
   margin-left: auto;
 }
 
+/* Inline-block i.p.v. flex, zodat de baseline van de tekst doorgegeven
+   wordt aan de flex-rij hierboven. */
+.variant__label-size-chart .tool-tip-trigger,
+.variant__label-size-chart .tool-tip-trigger__title {
+  display: inline-block;
+  line-height: inherit;
+}
+
 .variant__label-size-chart .tool-tip-trigger {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
   text-transform: uppercase;
 }
 
 .variant__label-size-chart .tool-tip-trigger__title {
-  display: inline-flex;
-  align-items: center;
   font-size: 0.8em;
   letter-spacing: 0.3em;
+  white-space: nowrap;
 }
 
 /* Meetlat-icoon staat links van de tekst, alleen de tekst is onderlijnd. */
 .size-chart__standalone .tool-tip-trigger .icon,
 .variant__label-size-chart .tool-tip-trigger .icon {
-  height: 20px;
-  width: 20px;
-  flex: 0 0 auto;
+  height: 1.4em;
+  width: 1.4em;
   margin-left: 0;
   margin-right: 6px;
+  vertical-align: -0.35em;
 }
 
 .size-chart__link-text {
