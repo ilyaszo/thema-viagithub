@@ -14,30 +14,38 @@
   endif
 -%}
 
+{%- liquid
+  assign show_inline_size_chart = false
+  if connect_to_sizechart and is_size
+    assign show_inline_size_chart = true
+  endif
+-%}
+
 <div class="variant-wrapper js" data-type="button">
-  <label class="variant__label{% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}{% unless variant_labels %} hidden-label{% endunless %}"
+  <label class="variant__label{% if show_inline_size_chart %} variant__label--size-chart{% endif %}{% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}{% unless variant_labels %} hidden-label{% endunless %}"
     for="ProductSelect-{{ section_id }}-{{ product.id }}-option-{{ forloop.index0 }}">
-    {{ option.name }}
-    {%- if connect_to_sizechart and is_size -%}
-      <span class="variant__label-info">
-        &mdash;
+    <span class="variant__label-name">
+      {{ option.name }}
+      {%- if is_color -%}
+        <span class="variant__label-info">
+          &mdash;
+          <span
+            data-variant-color-label
+            data-index="{{ forloop.index0 }}"
+            data-option-index="{{ color_option_index }}">
+            {{ option.selected_value }}
+          </span>
+        </span>
+      {%- endif -%}
+    </span>
+    {%- if show_inline_size_chart -%}
+      <span class="variant__label-info variant__label-size-chart">
         {%- render
           'tool-tip-trigger',
           title: size_chart_title,
           content: section.blocks[sizechart_index].settings.size_chart.content,
           context: 'size-chart'
         -%}
-      </span>
-    {%- endif -%}
-    {%- if is_color -%}
-      <span class="variant__label-info">
-        &mdash;
-        <span
-          data-variant-color-label
-          data-index="{{ forloop.index0 }}"
-          data-option-index="{{ color_option_index }}">
-          {{ option.selected_value }}
-        </span>
       </span>
     {%- endif -%}
   </label>

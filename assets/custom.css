@@ -479,3 +479,43 @@ button[class*="kiwi"],
     transform: translateX(-100%) !important;
   }
 }
+
+/* ================================
+   PRODUCT: SIZE CHART NAAST HET 'SIZE' LABEL
+================================ */
+
+.variant__label--size-chart[for] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.variant__label--size-chart .variant__label-name {
+  min-width: 0;
+}
+
+.variant__label-size-chart {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.variant__label-size-chart .tool-tip-trigger {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.variant__label-size-chart .tool-tip-trigger__title {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8em;
+  letter-spacing: 0.3em;
+}
+
+.variant__label-size-chart .tool-tip-trigger .icon {
+  height: 22px;
+  width: 22px;
+  margin-left: var(--sizeChartIconMargin, 4px);
+}
