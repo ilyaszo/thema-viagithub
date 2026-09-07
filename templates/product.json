@@ -414,6 +414,19 @@
         "lazyload_images": true
       }
     },
+    "featured_collection_F9wgjc": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.featured_collection.name",
+      "settings": {
+        "title": "we think you'll also love...",
+        "home_featured_products": "dresses",
+        "per_row": 4,
+        "rows": 1,
+        "mobile_scrollable": true,
+        "view_all": true,
+        "divider": false
+      }
+    },
     "faq_JkRWja": {
       "type": "faq",
       "blocks": {
@@ -571,6 +584,7 @@
     "featured_collection_zRnJ6y",
     "product-recommendations",
     "3d8cbd23-153b-4970-9ecb-7f3332b05c60",
+    "featured_collection_F9wgjc",
     "faq_JkRWja",
     "text_with_icons_NkkxnK",
     "recently-viewed",
