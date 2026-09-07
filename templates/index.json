@@ -77,6 +77,18 @@
         "divider": false
       }
     },
+    "featured_collection_qgBzXe": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "One of our favorites",
+        "home_featured_products": "outerwear",
+        "per_row": 4,
+        "rows": 1,
+        "mobile_scrollable": true,
+        "view_all": false,
+        "divider": false
+      }
+    },
     "scrolling_text_i6QHr4": {
       "type": "scrolling-text",
       "disabled": true,
@@ -494,6 +506,7 @@
     "slideshow",
     "3af7d296-2edb-4027-8a28-7b44e39c1b8f",
     "featured-collection",
+    "featured_collection_qgBzXe",
     "scrolling_text_i6QHr4",
     "580bc108-8f79-4c00-b080-103cccb091ef",
     "723a8f77-4c0d-4ef9-86de-d888090c48de",
