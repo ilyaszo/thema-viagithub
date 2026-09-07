@@ -327,44 +327,83 @@ button[class*="kiwi"],
   font-feature-settings: "tnum";
 }
 
-.cart-drawer__tiers {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+.cart-drawer__progress {
   background-color: var(--colorAnnouncement);
   color: var(--colorAnnouncementText);
-  padding: 8px 10px;
+  padding: 10px 16px 12px;
+}
+
+.cart-drawer__progress-message {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1.3;
 }
 
-.cart-drawer__tier {
-  display: inline-flex;
-  align-items: center;
+.cart-drawer__progress-track {
+  position: relative;
+  height: 6px;
+  margin: 0 7px;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.cart-drawer__progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background-color: var(--colorAnnouncementText);
+  transition: width 0.4s ease;
+}
+
+.cart-drawer__progress-dot {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  background-color: #fff;
+  transform: translateX(-50%);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.cart-drawer__progress-dot.is-last {
+  transform: translateX(-100%);
+}
+
+.cart-drawer__progress-dot.is-reached {
+  border-color: var(--colorAnnouncementText);
+  background-color: var(--colorAnnouncementText);
+}
+
+.cart-drawer__progress-labels {
+  position: relative;
+  height: 14px;
+  margin: 10px 7px 0;
+}
+
+.cart-drawer__progress-label {
+  position: absolute;
+  top: 0;
   white-space: nowrap;
-  font-weight: 600;
-  font-size: 12px;
-  padding: 2px 0;
+  font-size: 11px;
+  line-height: 14px;
+  opacity: 0.6;
+  transform: translateX(-50%);
+  transition: opacity 0.3s ease;
 }
 
-.cart-drawer__tier:not(:last-child)::after {
-  content: "";
-  display: inline-block;
-  width: 1px;
-  height: 12px;
-  margin: 0 10px;
-  background-color: currentColor;
-  opacity: 0.35;
+.cart-drawer__progress-label.is-last {
+  transform: translateX(-100%);
 }
 
-@media screen and (max-width: 400px) {
-  .cart-drawer__tier {
-    font-size: 11px;
-  }
-
-  .cart-drawer__tier:not(:last-child)::after {
-    margin: 0 7px;
-  }
+.cart-drawer__progress-label.is-reached {
+  font-weight: 700;
+  opacity: 1;
 }
 
 /* ================================

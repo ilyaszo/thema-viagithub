@@ -14,19 +14,27 @@
       </div>
 
       {%- comment -%}
-        Cart reservatie-timer + kortingstrap.
-        Pas de trappen hieronder aan; scheidingstekens en opmaak volgen vanzelf.
+        Cart reservatie-timer + kortingsvoortgang.
+        Trappen aanpassen doe je op de regel hieronder: 'aantal:procent',
+        gescheiden door een |. Meer of minder trappen mag; de balk verdeelt
+        zichzelf en de teksten volgen vanzelf.
       {%- endcomment -%}
-      {%- assign discount_tiers = 'Buy 2: 10% Off|Buy 3: 15% Off|Buy 4: 20% Off|Buy 5+: 25% Off' | split: '|' -%}
+      {%- assign discount_tiers = '2:10|3:15|4:20|5:25' -%}
 
       <div class="cart-drawer__reserve">
         Your cart is reserved for <span class="cart-drawer__reserve-time" data-cart-timer>10:00</span>
       </div>
 
-      <div class="cart-drawer__tiers">
-        {%- for tier in discount_tiers -%}
-          <span class="cart-drawer__tier">{{ tier }}</span>
-        {%- endfor -%}
+      <div
+        class="cart-drawer__progress"
+        data-cart-progress
+        data-tiers="{{ discount_tiers }}"
+        data-count="{{ cart.item_count }}">
+        <p class="cart-drawer__progress-message" data-cart-progress-message></p>
+        <div class="cart-drawer__progress-track" data-cart-progress-track>
+          <span class="cart-drawer__progress-fill" data-cart-progress-fill></span>
+        </div>
+        <div class="cart-drawer__progress-labels" data-cart-progress-labels></div>
       </div>
 
       <div class="drawer__inner">
@@ -140,6 +148,138 @@
 
       tick();
       setInterval(tick, 1000);
+    })();
+
+    /* Kortingsvoortgang: vult de balk op basis van het aantal artikelen in de cart. */
+    (function () {
+      function parseTiers(raw) {
+        return String(raw || '')
+          .split('|')
+          .map(function (part) {
+            var bits = part.split(':');
+            return { qty: parseInt(bits[0], 10), label: (bits[1] || '').trim() };
+          })
+          .filter(function (tier) {
+            return tier.qty > 0 && tier.label !== '';
+          })
+          .sort(function (a, b) {
+            return a.qty - b.qty;
+          });
+      }
+
+      function buildMarkers(root, tiers) {
+        var track = root.querySelector('[data-cart-progress-track]');
+        var labels = root.querySelector('[data-cart-progress-labels]');
+        if (!track || !labels || track.dataset.built === 'true') return;
+
+        tiers.forEach(function (tier, index) {
+          var position = ((index + 1) / tiers.length) * 100;
+          var isLast = index === tiers.length - 1;
+
+          var dot = document.createElement('span');
+          dot.className = 'cart-drawer__progress-dot' + (isLast ? ' is-last' : '');
+          dot.style.left = position + '%';
+          dot.setAttribute('data-tier-index', index);
+          track.appendChild(dot);
+
+          var label = document.createElement('span');
+          label.className = 'cart-drawer__progress-label' + (isLast ? ' is-last' : '');
+          label.style.left = position + '%';
+          label.setAttribute('data-tier-index', index);
+          label.textContent = tier.label + '% off';
+          labels.appendChild(label);
+        });
+
+        track.dataset.built = 'true';
+      }
+
+      function message(tiers, reached, count) {
+        if (reached === tiers.length - 1) {
+          return "You've unlocked the full " + tiers[reached].label + '% off';
+        }
+
+        var next = tiers[reached + 1];
+        var away = next.qty - count;
+        var noun = away === 1 ? 'item' : 'items';
+
+        if (reached < 0) {
+          return "You're " + away + ' ' + noun + ' away from ' + next.label + '% off';
+        }
+
+        return tiers[reached].label + '% off unlocked — ' + away + ' more ' + noun + ' for ' + next.label + '% off';
+      }
+
+      function render(root, count) {
+        var tiers = parseTiers(root.getAttribute('data-tiers'));
+        if (!tiers.length) return;
+
+        buildMarkers(root, tiers);
+
+        var reached = -1;
+        for (var i = 0; i < tiers.length; i++) {
+          if (count >= tiers[i].qty) reached = i;
+        }
+
+        /* Elke trap krijgt een even breed vak, zodat de bolletjes niet opeenhopen. */
+        var percent;
+        if (reached === tiers.length - 1) {
+          percent = 100;
+        } else {
+          var from = reached < 0 ? 0 : tiers[reached].qty;
+          var to = tiers[reached + 1].qty;
+          var within = to > from ? (count - from) / (to - from) : 0;
+          within = Math.max(0, Math.min(1, within));
+          percent = ((reached + 1 + within) / tiers.length) * 100;
+        }
+
+        var fill = root.querySelector('[data-cart-progress-fill]');
+        if (fill) fill.style.width = percent + '%';
+
+        var marks = root.querySelectorAll('[data-tier-index]');
+        for (var j = 0; j < marks.length; j++) {
+          var index = parseInt(marks[j].getAttribute('data-tier-index'), 10);
+          marks[j].classList.toggle('is-reached', index <= reached);
+        }
+
+        var text = root.querySelector('[data-cart-progress-message]');
+        if (text) text.textContent = message(tiers, reached, count);
+
+        root.setAttribute('data-count', count);
+      }
+
+      function renderAll(count) {
+        var roots = document.querySelectorAll('[data-cart-progress]');
+        for (var i = 0; i < roots.length; i++) {
+          render(roots[i], count);
+        }
+      }
+
+      function refresh() {
+        var url = (window.theme && theme.routes && theme.routes.cart) || '/cart.js';
+        fetch(url, { credentials: 'same-origin' })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (cart) {
+            renderAll(cart.item_count);
+          })
+          .catch(function () {});
+      }
+
+      var initial = document.querySelector('[data-cart-progress]');
+      renderAll(initial ? parseInt(initial.getAttribute('data-count'), 10) || 0 : 0);
+
+      document.addEventListener('cart:updated', function (evt) {
+        var cart = evt.detail && evt.detail.cart;
+        if (cart && typeof cart.item_count === 'number') {
+          renderAll(cart.item_count);
+        } else {
+          refresh();
+        }
+      });
+
+      document.addEventListener('ajaxProduct:added', refresh);
+      document.addEventListener('cart:build', refresh);
     })();
   </script>
 {%- endif -%}
