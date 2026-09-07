@@ -310,6 +310,12 @@ button[class*="kiwi"],
    automatisch meelopen met de storekleuren.
 ================================ */
 
+/* Lege cart: geen reservering om te tonen en niets om korting op te bouwen. */
+.drawer.is-empty .cart-drawer__reserve,
+.drawer.is-empty .cart-drawer__progress {
+  display: none;
+}
+
 .cart-drawer__reserve {
   background-color: var(--colorAnnouncementText);
   color: var(--colorAnnouncement);

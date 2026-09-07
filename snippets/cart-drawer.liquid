@@ -1,5 +1,5 @@
 {%- if settings.cart_type == 'drawer' -%}
-  <div id="CartDrawer" class="drawer drawer--right">
+  <div id="CartDrawer" class="drawer drawer--right{% if cart.item_count == 0 %} is-empty{% endif %}">
     <form id="CartDrawerForm" action="{{ routes.cart_url }}" method="post" novalidate class="drawer__contents" data-location="cart-drawer">
       <div class="drawer__fixed-header">
         <div class="drawer__header appear-animation appear-delay-1">
@@ -109,33 +109,47 @@
     </form>
   </div>
 
-  {%- comment -%} Reservatie-timer: telt 10 minuten af, blijft staan bij navigeren, herstart als hij op nul komt {%- endcomment -%}
+  {%- comment -%}
+    Reservatie-timer en kortingsvoortgang. Beide leven op het aantal artikelen
+    in de cart: bij een lege cart verbergt de CSS ze en zet de timer zichzelf
+    terug op 10:00, zodat het eerste artikel een volle reservering krijgt.
+  {%- endcomment -%}
   <script>
     (function () {
       var DURATION = 10 * 60 * 1000;
-      var KEY = 'cartReserveExpiry';
+      var STORAGE_KEY = 'cartReserveExpiry';
+      var expiry = null;
 
-      function freshExpiry() {
-        var expiry = Date.now() + DURATION;
-        try { sessionStorage.setItem(KEY, expiry); } catch (e) {}
-        return expiry;
+      /*============================================================================
+        Reservatie-timer
+      ==============================================================================*/
+      function startExpiry() {
+        var next = Date.now() + DURATION;
+        try { sessionStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+        return next;
       }
 
-      function currentExpiry() {
+      function resumeExpiry() {
         var stored = null;
-        try { stored = sessionStorage.getItem(KEY); } catch (e) {}
-        var expiry = parseInt(stored, 10);
-        if (!expiry || expiry <= Date.now()) return freshExpiry();
-        return expiry;
+        try { stored = sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+        var parsed = parseInt(stored, 10);
+        if (!parsed || parsed <= Date.now()) return startExpiry();
+        return parsed;
       }
 
-      var expiry = currentExpiry();
+      function resetExpiry() {
+        try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        expiry = null;
+      }
 
       function tick() {
+        if (!expiry) return;
+
         var els = document.querySelectorAll('[data-cart-timer]');
         if (!els.length) return;
 
-        if (Date.now() >= expiry) expiry = freshExpiry();
+        if (Date.now() >= expiry) expiry = startExpiry();
 
         var seconds = Math.max(0, Math.round((expiry - Date.now()) / 1000));
         var minutes = Math.floor(seconds / 60);
@@ -146,12 +160,9 @@
         }
       }
 
-      tick();
-      setInterval(tick, 1000);
-    })();
-
-    /* Kortingsvoortgang: vult de balk op basis van het aantal artikelen in de cart. */
-    (function () {
+      /*============================================================================
+        Kortingsvoortgang
+      ==============================================================================*/
       function parseTiers(raw) {
         return String(raw || '')
           .split('|')
@@ -209,7 +220,7 @@
         return tiers[reached].label + '% off unlocked — ' + away + ' more ' + noun + ' for ' + next.label + '% off';
       }
 
-      function render(root, count) {
+      function renderProgress(root, count) {
         var tiers = parseTiers(root.getAttribute('data-tiers'));
         if (!tiers.length) return;
 
@@ -247,10 +258,20 @@
         root.setAttribute('data-count', count);
       }
 
-      function renderAll(count) {
+      /*============================================================================
+        Beide balken volgen het aantal artikelen in de cart
+      ==============================================================================*/
+      function setCount(count) {
+        if (count > 0) {
+          if (!expiry) expiry = resumeExpiry();
+          tick();
+        } else {
+          resetExpiry();
+        }
+
         var roots = document.querySelectorAll('[data-cart-progress]');
         for (var i = 0; i < roots.length; i++) {
-          render(roots[i], count);
+          renderProgress(roots[i], count);
         }
       }
 
@@ -261,18 +282,18 @@
             return response.json();
           })
           .then(function (cart) {
-            renderAll(cart.item_count);
+            setCount(cart.item_count);
           })
           .catch(function () {});
       }
 
       var initial = document.querySelector('[data-cart-progress]');
-      renderAll(initial ? parseInt(initial.getAttribute('data-count'), 10) || 0 : 0);
+      setCount(initial ? parseInt(initial.getAttribute('data-count'), 10) || 0 : 0);
 
       document.addEventListener('cart:updated', function (evt) {
         var cart = evt.detail && evt.detail.cart;
         if (cart && typeof cart.item_count === 'number') {
-          renderAll(cart.item_count);
+          setCount(cart.item_count);
         } else {
           refresh();
         }
@@ -280,6 +301,8 @@
 
       document.addEventListener('ajaxProduct:added', refresh);
       document.addEventListener('cart:build', refresh);
+
+      setInterval(tick, 1000);
     })();
   </script>
 {%- endif -%}
