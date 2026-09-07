@@ -4,7 +4,6 @@
   mobile_layout
 {% endcomment %}
 
-{%- comment -%}Opnieuw gecommit voor de GitHub-sync.{%- endcomment -%}
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
 
@@ -500,12 +499,4 @@
       </div>
     </div>
   </div>
-
-  {%- if sticky_atc and isModal != true and context == 'main-product' and product.empty? == false -%}
-    {%- render 'sticky-atc',
-      product: product,
-      section_id: section_id,
-      show_desktop: sticky_atc_desktop
-    -%}
-  {%- endif -%}
 </div>
