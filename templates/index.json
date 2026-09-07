@@ -260,6 +260,7 @@
     },
     "text_and_image_bkymPN": {
       "type": "text-and-image",
+      "disabled": true,
       "name": "t:sections.text-and-image.presets.image_with_text.name",
       "settings": {
         "image": "shopify://shop_images/clothing-on-retail-rack.jpg",
@@ -503,8 +504,8 @@
     "background_image_text_4GyRpJ",
     "text_and_image_bkymPN",
     "3a7043b2-b960-4ba8-b429-94303cb61936",
-    "faq_BLhtjM",
     "text_with_icons_ARQhqG",
+    "faq_BLhtjM",
     "9640169b-14c8-476e-9b97-547fdd8772fc"
   ]
 }
