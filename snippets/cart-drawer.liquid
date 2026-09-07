@@ -14,16 +14,12 @@
       </div>
 
       {%- comment -%}
-        Cart reservatie-timer + kortingsvoortgang.
+        Kortingsvoortgang.
         Trappen aanpassen doe je op de regel hieronder: 'aantal:procent',
         gescheiden door een |. Meer of minder trappen mag; de balk verdeelt
         zichzelf en de teksten volgen vanzelf.
       {%- endcomment -%}
       {%- assign discount_tiers = '2:10|3:15|4:20|5:25' -%}
-
-      <div class="cart-drawer__reserve">
-        Your cart is reserved for <span class="cart-drawer__reserve-time" data-cart-timer>10:00</span>
-      </div>
 
       <div
         class="cart-drawer__progress"
@@ -110,56 +106,11 @@
   </div>
 
   {%- comment -%}
-    Reservatie-timer en kortingsvoortgang. Beide leven op het aantal artikelen
-    in de cart: bij een lege cart verbergt de CSS ze en zet de timer zichzelf
-    terug op 10:00, zodat het eerste artikel een volle reservering krijgt.
+    Kortingsvoortgang. Leeft op het aantal artikelen in de cart: bij een lege
+    cart verbergt de CSS de balk.
   {%- endcomment -%}
   <script>
     (function () {
-      var DURATION = 10 * 60 * 1000;
-      var STORAGE_KEY = 'cartReserveExpiry';
-      var expiry = null;
-
-      /*============================================================================
-        Reservatie-timer
-      ==============================================================================*/
-      function startExpiry() {
-        var next = Date.now() + DURATION;
-        try { sessionStorage.setItem(STORAGE_KEY, next); } catch (e) {}
-        return next;
-      }
-
-      function resumeExpiry() {
-        var stored = null;
-        try { stored = sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
-
-        var parsed = parseInt(stored, 10);
-        if (!parsed || parsed <= Date.now()) return startExpiry();
-        return parsed;
-      }
-
-      function resetExpiry() {
-        try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
-        expiry = null;
-      }
-
-      function tick() {
-        if (!expiry) return;
-
-        var els = document.querySelectorAll('[data-cart-timer]');
-        if (!els.length) return;
-
-        if (Date.now() >= expiry) expiry = startExpiry();
-
-        var seconds = Math.max(0, Math.round((expiry - Date.now()) / 1000));
-        var minutes = Math.floor(seconds / 60);
-        var text = (minutes < 10 ? '0' : '') + minutes + ':' + ('0' + (seconds % 60)).slice(-2);
-
-        for (var i = 0; i < els.length; i++) {
-          els[i].textContent = text;
-        }
-      }
-
       /*============================================================================
         Kortingsvoortgang
       ==============================================================================*/
@@ -259,16 +210,9 @@
       }
 
       /*============================================================================
-        Beide balken volgen het aantal artikelen in de cart
+        De balk volgt het aantal artikelen in de cart
       ==============================================================================*/
       function setCount(count) {
-        if (count > 0) {
-          if (!expiry) expiry = resumeExpiry();
-          tick();
-        } else {
-          resetExpiry();
-        }
-
         var roots = document.querySelectorAll('[data-cart-progress]');
         for (var i = 0; i < roots.length; i++) {
           renderProgress(roots[i], count);
@@ -301,8 +245,6 @@
 
       document.addEventListener('ajaxProduct:added', refresh);
       document.addEventListener('cart:build', refresh);
-
-      setInterval(tick, 1000);
     })();
   </script>
 {%- endif -%}

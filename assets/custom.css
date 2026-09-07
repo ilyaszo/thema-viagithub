@@ -305,32 +305,14 @@ button[class*="kiwi"],
 }
 
 /* ================================
-   CART DRAWER: RESERVATIE-TIMER + KORTINGSTRAP
-   Beide kleuren komen uit de announcement bar, zodat ze
+   CART DRAWER: KORTINGSTRAP
+   De kleuren komen uit de announcement bar, zodat ze
    automatisch meelopen met de storekleuren.
 ================================ */
 
-/* Lege cart: geen reservering om te tonen en niets om korting op te bouwen. */
-.drawer.is-empty .cart-drawer__reserve,
+/* Lege cart: niets om korting op te bouwen. */
 .drawer.is-empty .cart-drawer__progress {
   display: none;
-}
-
-.cart-drawer__reserve {
-  background-color: var(--colorAnnouncementText);
-  color: var(--colorAnnouncement);
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 1px;
-  padding: 10px 15px;
-  line-height: 1.3;
-}
-
-.cart-drawer__reserve-time {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
 }
 
 .cart-drawer__progress {
