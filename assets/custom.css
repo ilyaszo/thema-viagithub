@@ -609,3 +609,55 @@ button[class*="kiwi"],
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/*============================================================================
+  Prullenbak per cart-regel (drawer + cartpagina)
+==============================================================================*/
+.cart__item {
+  position: relative;
+}
+
+/* Ruimte vrijhouden zodat een lange producttitel niet onder het icoon loopt. */
+.cart__item-title {
+  padding-right: 30px;
+}
+
+.cart__item-remove {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 0;
+}
+
+/* De eerste regel heeft padding-top: 10px, het icoon schuift mee. */
+.cart__item:first-child .cart__item-remove {
+  top: 10px;
+}
+
+.cart__item-remove-btn {
+  display: block;
+  padding: 2px;
+  color: inherit;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+.cart__item-remove-btn:hover,
+.cart__item-remove-btn:focus {
+  color: inherit;
+  opacity: 1;
+}
+
+.cart__item-remove-btn .icon-trash {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+}
+
+/* Even uitgrijzen terwijl de regel verwijderd wordt. */
+.cart__item--removing {
+  opacity: 0.5;
+  pointer-events: none;
+}
