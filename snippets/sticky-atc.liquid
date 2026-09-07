@@ -84,6 +84,18 @@
     var section = document.getElementById(bar.dataset.section);
     if (!section) return;
 
+    // Direct onder body hangen. Een transform of overflow op een ouder maakt
+    // die ouder anders het referentiepunt voor position: fixed, waardoor de
+    // balk ergens midden op de pagina blijft plakken in plaats van onderin.
+    function moveToBody() {
+      if (bar.parentNode !== document.body) document.body.appendChild(bar);
+    }
+    if (document.body) {
+      moveToBody();
+    } else {
+      document.addEventListener('DOMContentLoaded', moveToBody);
+    }
+
     var realButton = section.querySelector('[data-add-to-cart]');
     var image = bar.querySelector('[data-sticky-atc-image]');
     var variantEl = bar.querySelector('[data-sticky-atc-variant]');
