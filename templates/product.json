@@ -396,7 +396,7 @@
         " /* Remove remaining beige gutter on the left */.feature-row,.feature-row__item,.feature-row__item--text {background-color: #ffffff !important;}"
       ],
       "settings": {
-        "image": "shopify://shop_images/contact-us-lettering.jpg",
+        "image": "shopify://shop_images/Gemini_Generated_Image_h5fjkeh5fjkeh5fj.jpg",
         "image_mask": "square",
         "image2_mask": "none",
         "subtitle": "",
@@ -406,8 +406,8 @@
         "button_link": "",
         "button_style": "primary",
         "align_text": "left",
-        "image_width": "50",
-        "layout": "right",
+        "image_width": "66",
+        "layout": "left",
         "divider": false,
         "top_padding": false,
         "bottom_padding": true,
