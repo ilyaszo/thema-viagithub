@@ -44,33 +44,6 @@
         "lazyload_images": true
       }
     },
-    "rich-text": {
-      "type": "rich-text",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "title": "WELCOME TO CLARA SYDNEY"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "enlarge_text": false,
-            "text": "<p><strong>Clara Sydney</strong> started with a simple idea. Getting dressed should be easy, and good style doesn't have to be complicated. We make comfortable, timeless pieces you'll want to wear again and again.</p><p>What began as a personal passion is now a family business, run by two generations working together. We pick every piece the way we'd pick it for ourselves. Good fabric, a comfortable fit, and a quiet kind of elegance. Clothes made to be lived in.</p><p>Thank you for supporting our family, and for letting Clara Sydney be part of your everyday.</p><p>With appreciation,<br/><br/><strong>Clara Kingsley</strong><br/><br/>Founder, Clara Sydney</p>"
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "text"
-      ],
-      "settings": {
-        "align_text": "center",
-        "narrow_column": true,
-        "divider": false
-      }
-    },
     "3af7d296-2edb-4027-8a28-7b44e39c1b8f": {
       "type": "text-and-image",
       "disabled": true,
@@ -95,7 +68,7 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Women",
+        "title": "Explore our bestsellers",
         "home_featured_products": "dresses",
         "per_row": 4,
         "rows": 1,
@@ -139,6 +112,33 @@
         "rows": 1,
         "mobile_scrollable": true,
         "view_all": true,
+        "divider": false
+      }
+    },
+    "rich-text": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "title": "WELCOME TO CLARA SYDNEY"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "enlarge_text": false,
+            "text": "<p><strong>Clara Sydney</strong> started with a simple idea. Getting dressed should be easy, and good style doesn't have to be complicated. We make comfortable, timeless pieces you'll want to wear again and again.</p><p>What began as a personal passion is now a family business, run by two generations working together. We pick every piece the way we'd pick it for ourselves. Good fabric, a comfortable fit, and a quiet kind of elegance. Clothes made to be lived in.</p><p>Thank you for supporting our family, and for letting Clara Sydney be part of your everyday.</p><p>With appreciation,<br/><br/><strong>Clara Kingsley</strong><br/><br/>Founder, Clara Sydney</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "align_text": "center",
+        "narrow_column": true,
         "divider": false
       }
     },
@@ -356,6 +356,50 @@
         "color_text": "#1c1d1d"
       }
     },
+    "text_with_icons_ARQhqG": {
+      "type": "text-with-icons",
+      "blocks": {
+        "text_block_7DBpF9": {
+          "type": "text_block",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "text": "<p>We offer free and fast shipping for maximum customer comfort. Your satisfaction is important to us, which is why we offer smooth and free delivery.</p>"
+          }
+        },
+        "text_block_gpDYWq": {
+          "type": "text_block",
+          "settings": {
+            "icon": "chat",
+            "title": "CUSTOMER SERVICE",
+            "text": "<p>Feel free to contact us at <strong>info@clarasydney.com</strong> We're ready to help and provide you with the right guidance.</p>"
+          }
+        },
+        "text_block_CpBx8p": {
+          "type": "text_block",
+          "settings": {
+            "icon": "shield",
+            "title": "SECURE PAYMENT",
+            "text": "<p>We offer you a variety of secure payment options like Credit card and Paypal. Pay easily and enjoy a safe shopping experience.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_block_7DBpF9",
+        "text_block_gpDYWq",
+        "text_block_CpBx8p"
+      ],
+      "name": "t:common.text_with_icons.presets.text_with_icons.name",
+      "settings": {
+        "title": "",
+        "align_text": "center",
+        "desktop_columns_per_row": 3,
+        "icon_color": "#000000",
+        "button_label": "",
+        "button_link": "",
+        "divider": false
+      }
+    },
     "faq_BLhtjM": {
       "type": "faq",
       "blocks": {
@@ -407,50 +451,6 @@
         "title": "FAQ"
       }
     },
-    "text_with_icons_ARQhqG": {
-      "type": "text-with-icons",
-      "blocks": {
-        "text_block_7DBpF9": {
-          "type": "text_block",
-          "settings": {
-            "icon": "truck",
-            "title": "Free Shipping",
-            "text": "<p>We offer free and fast shipping for maximum customer comfort. Your satisfaction is important to us, which is why we offer smooth and free delivery.</p>"
-          }
-        },
-        "text_block_gpDYWq": {
-          "type": "text_block",
-          "settings": {
-            "icon": "chat",
-            "title": "CUSTOMER SERVICE",
-            "text": "<p>Feel free to contact us at <strong>info@clarasydney.com</strong> We're ready to help and provide you with the right guidance.</p>"
-          }
-        },
-        "text_block_CpBx8p": {
-          "type": "text_block",
-          "settings": {
-            "icon": "shield",
-            "title": "SECURE PAYMENT",
-            "text": "<p>We offer you a variety of secure payment options like Credit card and Paypal. Pay easily and enjoy a safe shopping experience.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "text_block_7DBpF9",
-        "text_block_gpDYWq",
-        "text_block_CpBx8p"
-      ],
-      "name": "t:common.text_with_icons.presets.text_with_icons.name",
-      "settings": {
-        "title": "",
-        "align_text": "center",
-        "desktop_columns_per_row": 3,
-        "icon_color": "#000000",
-        "button_label": "",
-        "button_link": "",
-        "divider": false
-      }
-    },
     "9640169b-14c8-476e-9b97-547fdd8772fc": {
       "type": "newsletter",
       "blocks": {
@@ -492,12 +492,12 @@
   },
   "order": [
     "slideshow",
-    "rich-text",
     "3af7d296-2edb-4027-8a28-7b44e39c1b8f",
     "featured-collection",
     "scrolling_text_i6QHr4",
     "580bc108-8f79-4c00-b080-103cccb091ef",
     "723a8f77-4c0d-4ef9-86de-d888090c48de",
+    "rich-text",
     "32a99c62-e8f3-4b9d-afcd-d1543f4f73ee",
     "fc773646-0206-460f-a860-ec2b4a87f088",
     "974e4b1e-383b-4712-abad-44cfeb85e568",
