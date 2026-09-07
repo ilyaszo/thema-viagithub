@@ -154,6 +154,18 @@
         "divider": false
       }
     },
+    "featured_collection_GKD8YQ": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "THE SHOE EDIT",
+        "home_featured_products": "shoes",
+        "per_row": 4,
+        "rows": 1,
+        "mobile_scrollable": true,
+        "view_all": false,
+        "divider": false
+      }
+    },
     "32a99c62-e8f3-4b9d-afcd-d1543f4f73ee": {
       "type": "rich-text",
       "blocks": {
@@ -511,6 +523,7 @@
     "580bc108-8f79-4c00-b080-103cccb091ef",
     "723a8f77-4c0d-4ef9-86de-d888090c48de",
     "rich-text",
+    "featured_collection_GKD8YQ",
     "32a99c62-e8f3-4b9d-afcd-d1543f4f73ee",
     "fc773646-0206-460f-a860-ec2b4a87f088",
     "974e4b1e-383b-4712-abad-44cfeb85e568",
