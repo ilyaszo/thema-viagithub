@@ -1,0 +1,198 @@
+{% comment %}
+  Opnieuw gecommit zodat de GitHub-sync dit bestand oppakt.
+
+  Sticky add-to-cart balk.
+  Verschijnt zodra de echte add-to-cart knop uit beeld is en spiegelt
+  titel, variant, prijs en afbeelding van de geselecteerde variant.
+
+  Parameters:
+  product     - het product
+  section_id  - id van de sectie waarin de echte knop staat
+  show_desktop - toon de balk ook op desktop
+{% endcomment %}
+
+{%- liquid
+  assign sticky_variant = product.selected_or_first_available_variant
+  assign sticky_id = 'StickyAtc-' | append: section_id | append: '-' | append: product.id
+  assign sticky_section = 'ProductSection-' | append: section_id | append: '-' | append: product.id
+
+  if sticky_variant.compare_at_price > sticky_variant.price
+    assign sticky_compare = sticky_variant.compare_at_price
+  else
+    assign sticky_compare = sticky_variant.price | times: 2
+  endif
+
+  if sticky_variant.featured_media
+    assign sticky_image = sticky_variant.featured_media.preview_image
+  else
+    assign sticky_image = product.featured_media.preview_image
+  endif
+-%}
+
+<div
+  id="{{ sticky_id }}"
+  class="sticky-atc{% unless show_desktop %} sticky-atc--mobile-only{% endunless %}"
+  data-sticky-atc
+  data-section="{{ sticky_section }}"
+  aria-hidden="true">
+  <div class="sticky-atc__inner">
+    <div class="sticky-atc__image">
+      {%- if sticky_image -%}
+        <img
+          src="{{ sticky_image | img_url: '200x' }}"
+          alt="{{ sticky_image.alt | escape }}"
+          width="200"
+          height="{{ 200 | divided_by: sticky_image.aspect_ratio | round }}"
+          loading="lazy"
+          data-sticky-atc-image>
+      {%- endif -%}
+    </div>
+
+    <div class="sticky-atc__info">
+      <span class="sticky-atc__title">{{ product.title }}</span>
+      {%- unless product.has_only_default_variant -%}
+        <span class="sticky-atc__variant" data-sticky-atc-variant>{{ sticky_variant.title }}</span>
+      {%- endunless -%}
+    </div>
+
+    <div class="sticky-atc__prices">
+      <span class="sticky-atc__price" data-sticky-atc-price>{{ sticky_variant.price | money }}</span>
+      <span class="sticky-atc__compare" data-sticky-atc-compare>{{ sticky_compare | money }}</span>
+    </div>
+
+    <button
+      type="button"
+      class="sticky-atc__button"
+      data-sticky-atc-button
+      aria-label="{{ 'products.product.add_to_cart' | t }}"
+      title="{{ 'products.product.add_to_cart' | t }}">
+      <svg class="sticky-atc__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M5.5 8h13l.9 11.5a1.5 1.5 0 0 1-1.5 1.6H6.1a1.5 1.5 0 0 1-1.5-1.6L5.5 8Z"/>
+        <path d="M8.8 8V6.2a3.2 3.2 0 0 1 6.4 0V8"/>
+        <path d="M12 12.4v5.2M9.4 15h5.2"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var bar = document.getElementById('{{ sticky_id }}');
+    if (!bar || bar.dataset.stickyAtcInit) return;
+    bar.dataset.stickyAtcInit = 'true';
+
+    var section = document.getElementById(bar.dataset.section);
+    if (!section) return;
+
+    // Direct onder body hangen. Een transform of overflow op een ouder maakt
+    // die ouder anders het referentiepunt voor position: fixed, waardoor de
+    // balk ergens midden op de pagina blijft plakken in plaats van onderin.
+    function moveToBody() {
+      if (bar.parentNode !== document.body) document.body.appendChild(bar);
+    }
+    if (document.body) {
+      moveToBody();
+    } else {
+      document.addEventListener('DOMContentLoaded', moveToBody);
+    }
+
+    var realButton = section.querySelector('[data-add-to-cart]');
+    var image = bar.querySelector('[data-sticky-atc-image]');
+    var variantEl = bar.querySelector('[data-sticky-atc-variant]');
+    var priceEl = bar.querySelector('[data-sticky-atc-price]');
+    var compareEl = bar.querySelector('[data-sticky-atc-compare]');
+    var button = bar.querySelector('[data-sticky-atc-button]');
+
+    function money(cents) {
+      if (window.theme && theme.Currency && theme.Currency.formatMoney) {
+        return theme.Currency.formatMoney(cents, theme.settings.moneyFormat);
+      }
+      return (cents / 100).toFixed(2);
+    }
+
+    // Vraag een kleinere versie van de Shopify-afbeelding op.
+    function resize(src, width) {
+      return src.replace(/(\.(?:jpg|jpeg|png|webp|gif))(\?|$)/i, '_' + width + 'x$1$2');
+    }
+
+    // De echte knop bepaalt of we kunnen bestellen.
+    function syncButtonState() {
+      if (!realButton) return;
+      var disabled = realButton.hasAttribute('disabled');
+      button.disabled = disabled;
+      bar.classList.toggle('sticky-atc--sold-out', disabled);
+    }
+
+    function update(variant) {
+      if (!variant) return;
+
+      if (variantEl) variantEl.textContent = variant.title;
+
+      if (priceEl) priceEl.innerHTML = money(variant.price);
+
+      if (compareEl) {
+        var compare = variant.compare_at_price > variant.price
+          ? variant.compare_at_price
+          : variant.price * 2;
+        compareEl.innerHTML = money(compare);
+      }
+
+      if (image && variant.featured_image && variant.featured_image.src) {
+        image.src = resize(variant.featured_image.src, 200);
+        image.alt = variant.featured_image.alt || '';
+      }
+    }
+
+    // De sectie zelf vuurt dit event, zodat quick-shop modals de balk niet raken.
+    section.addEventListener('variantChange', function (evt) {
+      var detail = evt.detail || {};
+      if (!detail.variant) return;
+      update(detail.variant);
+      // De thema-code zet de knop pas na dit event uit, dus even wachten.
+      setTimeout(syncButtonState, 0);
+    });
+
+    if (realButton) {
+      button.addEventListener('click', function () {
+        if (realButton.hasAttribute('disabled')) return;
+        realButton.click();
+      });
+
+      new MutationObserver(syncButtonState).observe(realButton, {
+        attributes: true,
+        attributeFilter: ['disabled']
+      });
+      syncButtonState();
+    }
+
+    // Tonen zodra de echte knop uit beeld is en er een stuk gescrold is.
+    var buttonInView = true;
+    var ticking = false;
+
+    function render() {
+      ticking = false;
+      var show = !buttonInView && window.pageYOffset > 200;
+      bar.classList.toggle('sticky-atc--visible', show);
+      bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    function schedule() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(render);
+    }
+
+    if (realButton && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        buttonInView = entries[0].isIntersecting;
+        schedule();
+      }, { rootMargin: '-40px 0px -40px 0px' }).observe(realButton);
+    } else {
+      buttonInView = false;
+    }
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    render();
+  })();
+</script>

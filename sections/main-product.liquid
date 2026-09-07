@@ -1,3 +1,4 @@
+{%- comment -%}Opnieuw gecommit voor de GitHub-sync.{%- endcomment -%}
 {%- liquid
   assign isModal = false
   if template == 'product.modal'
@@ -21,6 +22,8 @@
   video_looping: section.settings.enable_video_looping,
   video_style: section.settings.product_video_style,
   context: 'main-product',
+  sticky_atc: section.settings.sticky_atc_enable,
+  sticky_atc_desktop: section.settings.sticky_atc_desktop,
 -%}
 
 {% schema %}
@@ -158,6 +161,23 @@
         }
       ],
       "info": "t:sections.main-product.settings.product_video_style.info"
+    },
+    {
+      "type": "header",
+      "content": "Sticky add to cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_enable",
+      "label": "Toon sticky add-to-cart balk",
+      "default": true,
+      "info": "Verschijnt zodra de add-to-cart knop uit beeld is."
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_desktop",
+      "label": "Ook tonen op desktop",
+      "default": true
     }
   ],
   "blocks": [{
