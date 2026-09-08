@@ -23,6 +23,407 @@
   context: 'main-product',
 -%}
 
+
+{%- comment -%}
+  Sticky add-to-cart balk.
+  Schuift onderin beeld zodra de echte add-to-cart knop weggescrold is en
+  verdwijnt weer zodra die knop terug in beeld komt. De balk bedient de
+  bestaande variant-radio's en de echte knop, dus alle thema-logica
+  (beschikbaarheid, ajax cart, prijsupdates) blijft leidend.
+{%- endcomment -%}
+{%- unless isModal -%}
+  {%- if product != blank and product.id -%}
+    {%- liquid
+      assign sticky_variant = product.selected_or_first_available_variant
+      assign sticky_bar_id = 'StickyAtcBar-' | append: section.id | append: '-' | append: product.id
+      assign sticky_target = 'ProductSection-' | append: section.id | append: '-' | append: product.id
+
+      if sticky_variant.featured_media
+        assign sticky_image = sticky_variant.featured_media.preview_image
+      else
+        assign sticky_image = product.featured_media.preview_image
+      endif
+    -%}
+
+    <style>
+      .sticky-atc {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 20;
+        background-color: var(--colorBody, #fff);
+        color: var(--colorTextBody, #1c1d1d);
+        border-top: 1px solid var(--colorBorder, #e8e8e8);
+        box-shadow: 0 -6px 24px rgba(0, 0, 0, .08);
+        transform: translateY(110%);
+        visibility: hidden;
+        transition: transform .3s ease, visibility 0s linear .3s;
+      }
+
+      .sticky-atc.is-visible {
+        transform: none;
+        visibility: visible;
+        transition: transform .3s ease;
+      }
+
+      /* De cart drawer en quick-shop modal krijgen de balk niet in de weg. */
+      .js-drawer-open .sticky-atc,
+      .modal-open .sticky-atc {
+        transform: translateY(110%);
+        visibility: hidden;
+      }
+
+      .sticky-atc__inner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px 20px;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .sticky-atc__image {
+        flex: 0 0 auto;
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        overflow: hidden;
+        background-color: var(--colorSmallImageBg, #f4f4f4);
+      }
+
+      .sticky-atc__image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .sticky-atc__info {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .sticky-atc__title {
+        font-size: calc(var(--typeBaseSize, 16px) - 1px);
+        font-weight: 600;
+        line-height: 1.25;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 34vw;
+      }
+
+      .sticky-atc__prices {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        font-size: calc(var(--typeBaseSize, 16px) - 2px);
+        line-height: 1.2;
+      }
+
+      .sticky-atc__price {
+        font-weight: 600;
+      }
+
+      .sticky-atc__compare {
+        opacity: .6;
+        font-weight: 400;
+      }
+
+      .sticky-atc__compare[hidden] {
+        display: none;
+      }
+
+      .sticky-atc__actions {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sticky-atc__select {
+        appearance: none;
+        -webkit-appearance: none;
+        border: 1px solid var(--colorBorder, #d9d9d9);
+        border-radius: var(--buttonRadius, 0);
+        background-color: var(--colorBody, #fff);
+        color: inherit;
+        font-family: inherit;
+        font-size: calc(var(--typeBaseSize, 16px) - 2px);
+        line-height: 1.2;
+        padding: 12px 34px 12px 14px;
+        max-width: 160px;
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23333' stroke-width='1.5'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 11px 8px;
+      }
+
+      .sticky-atc__button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 0;
+        border-radius: var(--buttonRadius, 0);
+        background-color: var(--colorBtnPrimary, #000);
+        color: var(--colorBtnPrimaryText, #fff);
+        font-family: inherit;
+        font-size: calc(var(--typeBaseSize, 16px) - 2px);
+        font-weight: 600;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        line-height: 1;
+        padding: 15px 26px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: opacity .2s ease;
+      }
+
+      .sticky-atc__button:hover {
+        opacity: .85;
+      }
+
+      .sticky-atc__button[disabled] {
+        opacity: .45;
+        cursor: not-allowed;
+      }
+
+      @media screen and (max-width: 749px) {
+        .sticky-atc__inner {
+          gap: 10px;
+          padding: 8px 14px;
+          padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+        }
+
+        .sticky-atc__image {
+          width: 42px;
+          height: 42px;
+        }
+
+        .sticky-atc__title {
+          max-width: 40vw;
+          font-size: calc(var(--typeBaseSize, 16px) - 3px);
+        }
+
+        .sticky-atc__select {
+          display: none;
+        }
+
+        .sticky-atc__button {
+          padding: 14px 18px;
+          font-size: calc(var(--typeBaseSize, 16px) - 3px);
+          letter-spacing: .05em;
+        }
+
+        .sticky-atc__arrow {
+          display: none;
+        }
+      }
+    </style>
+
+    <div
+      id="{{ sticky_bar_id }}"
+      class="sticky-atc"
+      data-sticky-atc
+      data-sticky-target="{{ sticky_target }}"
+      aria-hidden="true">
+      <div class="sticky-atc__inner">
+        {%- if sticky_image -%}
+          <div class="sticky-atc__image">
+            <img
+              src="{{ sticky_image | image_url: width: 160 }}"
+              alt="{{ sticky_image.alt | escape }}"
+              width="80"
+              height="80"
+              loading="lazy"
+              data-sticky-image>
+          </div>
+        {%- endif -%}
+
+        <div class="sticky-atc__info">
+          <span class="sticky-atc__title">{{ product.title }}</span>
+          <span class="sticky-atc__prices">
+            <span class="sticky-atc__price" data-sticky-price>{{ sticky_variant.price | money }}</span>
+            <s
+              class="sticky-atc__compare"
+              data-sticky-compare
+              {% unless sticky_variant.compare_at_price > sticky_variant.price %}hidden{% endunless %}>
+              {{ sticky_variant.compare_at_price | money }}
+            </s>
+          </span>
+        </div>
+
+        <div class="sticky-atc__actions">
+          {%- unless product.has_only_default_variant -%}
+            {%- for option in product.options_with_values -%}
+              <select
+                class="sticky-atc__select"
+                data-sticky-option="option{{ forloop.index }}"
+                aria-label="{{ option.name | escape }}">
+                {%- for value in option.values -%}
+                  <option value="{{ value | escape }}"{% if option.selected_value == value %} selected{% endif %}>{{ value }}</option>
+                {%- endfor -%}
+              </select>
+            {%- endfor -%}
+          {%- endunless -%}
+
+          <button type="button" class="sticky-atc__button" data-sticky-button>
+            <span data-sticky-button-text>{{ 'products.product.add_to_cart' | t }}</span>
+            <span class="sticky-atc__arrow" aria-hidden="true">&#8594;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var bar = document.getElementById('{{ sticky_bar_id }}');
+        if (!bar || bar.dataset.stickyInit) return;
+        bar.dataset.stickyInit = 'true';
+
+        var section = document.getElementById(bar.dataset.stickyTarget);
+        if (!section) return;
+
+        // Direct onder body hangen: een transform of filter op een ouder maakt
+        // die ouder anders het referentiepunt voor position: fixed.
+        function moveToBody() {
+          if (bar.parentNode !== document.body) document.body.appendChild(bar);
+        }
+        if (document.body) {
+          moveToBody();
+        } else {
+          document.addEventListener('DOMContentLoaded', moveToBody);
+        }
+
+        var realButton = section.querySelector('[data-add-to-cart]');
+        var realButtonText = section.querySelector('[data-add-to-cart-text]');
+        var imageEl = bar.querySelector('[data-sticky-image]');
+        var priceEl = bar.querySelector('[data-sticky-price]');
+        var compareEl = bar.querySelector('[data-sticky-compare]');
+        var button = bar.querySelector('[data-sticky-button]');
+        var buttonText = bar.querySelector('[data-sticky-button-text]');
+        var selects = bar.querySelectorAll('[data-sticky-option]');
+
+        function money(cents) {
+          if (window.theme && theme.Currency && theme.Currency.formatMoney) {
+            return theme.Currency.formatMoney(cents, theme.settings && theme.settings.moneyFormat);
+          }
+          return (cents / 100).toFixed(2);
+        }
+
+        // Vraag een kleinere versie van de Shopify-afbeelding op.
+        function resize(src, width) {
+          return src.replace(/(\.(?:jpg|jpeg|png|webp|gif))(\?|$)/i, '_' + width + 'x$1$2');
+        }
+
+        // De echte knop blijft leidend voor tekst en beschikbaarheid.
+        function syncButton() {
+          if (!realButton) return;
+          button.disabled = realButton.hasAttribute('disabled');
+          if (realButtonText && buttonText) {
+            buttonText.textContent = realButtonText.textContent.trim();
+          }
+        }
+
+        function updateFromVariant(variant) {
+          if (!variant) return;
+
+          if (priceEl) priceEl.innerHTML = money(variant.price);
+
+          if (compareEl) {
+            if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+              compareEl.innerHTML = money(variant.compare_at_price);
+              compareEl.hidden = false;
+            } else {
+              compareEl.hidden = true;
+            }
+          }
+
+          if (imageEl && variant.featured_image && variant.featured_image.src) {
+            imageEl.src = resize(variant.featured_image.src, 160);
+            imageEl.alt = variant.featured_image.alt || '';
+          }
+
+          // Zet de dropdowns gelijk aan wat het thema geselecteerd heeft.
+          Array.prototype.forEach.call(selects, function (select) {
+            var value = variant[select.dataset.stickyOption];
+            if (value && select.value !== value) select.value = value;
+          });
+        }
+
+        // De dropdowns bedienen de echte variant-radio's, zodat het thema zelf
+        // de variant bepaalt en alle bijbehorende updates uitvoert.
+        Array.prototype.forEach.call(selects, function (select) {
+          select.addEventListener('change', function () {
+            var inputs = section.querySelectorAll('[data-variant-input][data-index="' + select.dataset.stickyOption + '"]');
+            for (var i = 0; i < inputs.length; i++) {
+              if (inputs[i].value === select.value) {
+                if (!inputs[i].checked) inputs[i].click();
+                return;
+              }
+            }
+          });
+        });
+
+        section.addEventListener('variantChange', function (event) {
+          var detail = event.detail || {};
+          updateFromVariant(detail.variant);
+          // Het thema zet de knop pas na dit event uit, dus een tik later kijken.
+          setTimeout(syncButton, 0);
+        });
+
+        if (realButton) {
+          button.addEventListener('click', function () {
+            if (realButton.hasAttribute('disabled')) return;
+            realButton.click();
+          });
+
+          new MutationObserver(syncButton).observe(realButton, {
+            attributes: true,
+            attributeFilter: ['disabled'],
+            childList: true,
+            subtree: true
+          });
+          syncButton();
+        }
+
+        // Tonen zodra de echte knop uit beeld is, verbergen zodra hij terug is.
+        var buttonInView = true;
+        var ticking = false;
+
+        function render() {
+          ticking = false;
+          var show = !buttonInView && window.pageYOffset > 150;
+          bar.classList.toggle('is-visible', show);
+          bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+        }
+
+        function schedule() {
+          if (ticking) return;
+          ticking = true;
+          window.requestAnimationFrame(render);
+        }
+
+        if (realButton && 'IntersectionObserver' in window) {
+          new IntersectionObserver(function (entries) {
+            buttonInView = entries[0].isIntersecting;
+            schedule();
+          }, { rootMargin: '0px 0px -30px 0px' }).observe(realButton);
+        }
+
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule, { passive: true });
+        render();
+      })();
+    </script>
+  {%- endif -%}
+{%- endunless -%}
 {% schema %}
 {
   "name": "t:sections.main-product.name",
