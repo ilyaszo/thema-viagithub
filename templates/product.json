@@ -12,6 +12,12 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "custom_cwm7xn": {
+          "type": "custom",
+          "settings": {
+            "code": "<div class=\"spacer-block\"></div>\n\n<style>\n  .spacer-block { height: 1px; }\n  @media (max-width: 749px) {\n    .spacer-block { height: 40px; }\n  }\n</style>"
+          }
+        },
         "d96502fe-65de-478e-8671-66d784e17eed": {
           "type": "custom",
           "disabled": true,
@@ -171,6 +177,7 @@
         }
       },
       "block_order": [
+        "custom_cwm7xn",
         "d96502fe-65de-478e-8671-66d784e17eed",
         "price",
         "1d232ef7-95ed-4df2-bc2a-0227ec416065",
