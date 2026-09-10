@@ -40,21 +40,21 @@
           "type": "sales_point",
           "settings": {
             "icon": "australia-post",
-            "text": "<strong>Free Shipping with Australia Post</strong>"
+            "text": "<strong>Free Shipping</strong> with Australia Post"
           }
         },
         "57bb83ff-5707-44e2-890a-b99b17e9d787": {
           "type": "sales_point",
           "settings": {
             "icon": "kopstorm-1",
-            "text": "<strong>30-Day Money-Back Guarantee</strong>"
+            "text": "30-Day <strong>Money-Back Guarantee</strong>"
           }
         },
         "b801b248-619b-4251-9575-12d9e4cdaca0": {
           "type": "sales_point",
           "settings": {
             "icon": "shield",
-            "text": "<strong>Pay safely with Creditcard</strong>"
+            "text": "<strong>Pay safely</strong> with Creditcard"
           }
         },
         "separator_RQACVW": {
