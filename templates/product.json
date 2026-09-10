@@ -40,7 +40,7 @@
           "type": "sales_point",
           "settings": {
             "icon": "australia-post",
-            "text": "<strong>Free Shipping</strong> with Australia Post"
+            "text": "Free Shipping with Australia Post"
           }
         },
         "57bb83ff-5707-44e2-890a-b99b17e9d787": {
@@ -59,6 +59,7 @@
         },
         "separator_RQACVW": {
           "type": "separator",
+          "disabled": true,
           "settings": {}
         },
         "a87f6976-fdca-403c-9377-eb85cc84bccd": {
@@ -108,6 +109,7 @@
         },
         "custom_tUi9j7": {
           "type": "custom",
+          "disabled": true,
           "settings": {
             "code": "{%- if shop.enabled_payment_types.size > 0 -%}\n<div class=\"payment-icons\">\n  <ul class=\"payment-icons__list\">\n    {%- for type in shop.enabled_payment_types -%}\n      <li class=\"payment-icons__item\">\n        {{ type | payment_type_svg_tag: class: 'payment-icons__svg' }}\n      </li>\n    {%- endfor -%}\n  </ul>\n</div>\n{%- endif -%}\n\n<style>\n.payment-icons {\n  margin: 14px 0 18px;\n}\n.payment-icons__list {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n.payment-icons__item { display: flex; }\n.payment-icons__svg {\n  width: 58px;\n  height: 38px;\n  display: block;\n  border-radius: 4px;\n  box-shadow: 0 0 0 1px rgba(0,0,0,.07);\n}\n@media (max-width: 480px) {\n  .payment-icons__svg { width: 48px; height: 32px; }\n  .payment-icons__list { gap: 8px; }\n}\n</style>"
           }
