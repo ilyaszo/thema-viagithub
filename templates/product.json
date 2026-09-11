@@ -40,7 +40,7 @@
           "type": "sales_point",
           "settings": {
             "icon": "australia-post",
-            "text": "Free Shipping with Australia Post"
+            "text": "<strong>Free Shipping</strong> with Australia Post"
           }
         },
         "57bb83ff-5707-44e2-890a-b99b17e9d787": {
@@ -54,7 +54,7 @@
           "type": "sales_point",
           "settings": {
             "icon": "shield",
-            "text": "Pay Safely with Credit Card"
+            "text": "<strong>Pay Safely</strong> with Credit Card"
           }
         },
         "separator_RQACVW": {
