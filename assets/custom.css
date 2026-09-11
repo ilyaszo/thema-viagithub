@@ -7,7 +7,7 @@
 .product__price .price-item--sale *,
 .price--on-sale .price-item--sale,
 .price--on-sale .price-item--sale * {
-  color: #C00000 !important;
+  color: #A40303 !important;
 }
 
 
@@ -430,7 +430,7 @@ button[class*="kiwi"],
 
 /* Nieuwe prijs: rood, donkere kant maar niet te donker */
 .cart__item-price-col .cart__price {
-  color: #C00000 !important;
+  color: #A40303 !important;
   font-weight: 700;
 }
 
@@ -525,7 +525,7 @@ button[class*="kiwi"],
 
 .cart-drawer__discount-amount {
   font-weight: 700;
-  color: #C00000;
+  color: #A40303;
 }
 
 /* ================================
