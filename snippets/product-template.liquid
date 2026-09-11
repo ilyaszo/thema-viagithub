@@ -309,7 +309,7 @@
                   {%- when 'size_chart' -%}
                     {% if connect_to_sizechart == false %}
                       {%- capture size_chart_title -%}
-                        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-size-chart" viewBox="0 0 64 64"><path d="M8.5 48.5 L15.5 55.5 L55.5 15.5 L48.5 8.5 Z"/><path d="M15.1 41.8 L18 44.6"/><path d="M21.8 35.1 L24.6 38"/><path d="M28.5 28.5 L31.3 31.3"/><path d="M35.1 21.8 L38 24.6"/><path d="M41.8 15.1 L44.6 18"/><circle cx="48.3" cy="15.7" r="2.2"/></svg><span class="size-chart__link-text">{{ 'products.general.size_chart' | t }}</span>
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-size-chart" viewBox="0 0 64 64"><path d="M6 18 H50"/><path d="M6 32 H58"/><path d="M6 46 H42"/></svg><span class="size-chart__link-text">{{ 'products.general.size_chart' | t }}</span>
                       {%- endcapture -%}
 
                       <div class="size-chart__standalone" {{ block.shopify_attributes }}>
@@ -328,6 +328,7 @@
                     {% endif %}
                   {%- when 'variant_picker' -%}
                     <div class="product-block" {% if block.settings.product_dynamic_variants_enable %}data-dynamic-variants-enabled{% endif %} {{ block.shopify_attributes }}>
+                      {%- render 'kopstorm-snippet-1', product: product -%}
                       {%- unless product.has_only_default_variant -%}
                         {%- for option in product.options_with_values -%}
                           {%- liquid
@@ -375,7 +376,6 @@
                   {%- when 'buy_buttons' -%}
                     <div class="product-block" {{ block.shopify_attributes }}>
                       {%- unless product.empty? -%}
-                        {%- render 'kopstorm-snippet-1', product: product -%}
                         <div class="product-block">
                           {%- render 'product-form',
                             form_id: form_id,

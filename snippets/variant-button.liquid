@@ -1,7 +1,7 @@
 {%- assign swatch_file_extension = 'png' -%}
 
 {%- capture size_chart_title -%}
-  <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-size-chart" viewBox="0 0 64 64"><path d="M8.5 48.5 L15.5 55.5 L55.5 15.5 L48.5 8.5 Z"/><path d="M15.1 41.8 L18 44.6"/><path d="M21.8 35.1 L24.6 38"/><path d="M28.5 28.5 L31.3 31.3"/><path d="M35.1 21.8 L38 24.6"/><path d="M41.8 15.1 L44.6 18"/><circle cx="48.3" cy="15.7" r="2.2"/></svg><span class="size-chart__link-text">{{ 'products.general.size_chart' | t }}</span>
+  <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-size-chart" viewBox="0 0 64 64"><path d="M6 18 H50"/><path d="M6 32 H58"/><path d="M6 46 H42"/></svg><span class="size-chart__link-text">{{ 'products.general.size_chart' | t }}</span>
 {%- endcapture -%}
 
 {%- liquid
@@ -38,16 +38,6 @@
         </span>
       {%- endif -%}
     </span>
-    {%- if show_inline_size_chart -%}
-      <span class="variant__label-info variant__label-size-chart">
-        {%- render
-          'tool-tip-trigger',
-          title: size_chart_title,
-          content: section.blocks[sizechart_index].settings.size_chart.content,
-          context: 'size-chart'
-        -%}
-      </span>
-    {%- endif -%}
   </label>
   {%- assign option_index = forloop.index -%}
   <fieldset class="variant-input-wrap"
@@ -110,4 +100,14 @@
       </div>
     {%- endfor -%}
   </fieldset>
+  {%- if show_inline_size_chart -%}
+    <div class="variant__size-chart-below">
+      {%- render
+        'tool-tip-trigger',
+        title: size_chart_title,
+        content: section.blocks[sizechart_index].settings.size_chart.content,
+        context: 'size-chart'
+      -%}
+    </div>
+  {%- endif -%}
 </div>
