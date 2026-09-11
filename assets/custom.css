@@ -494,13 +494,6 @@ button[class*="kiwi"],
   margin-bottom: 8px !important;
 }
 
-.cart-drawer__trust-was {
-  text-decoration: line-through;
-  color: #999999;
-  font-size: 0.85em;
-  margin-left: 4px;
-}
-
 .cart-drawer__trust-free {
   font-weight: 700;
   color: #000000;
