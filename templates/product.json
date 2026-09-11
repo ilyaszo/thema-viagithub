@@ -425,6 +425,7 @@
     },
     "featured_collection_F9wgjc": {
       "type": "featured-collection",
+      "disabled": true,
       "name": "t:sections.featured-collection.presets.featured_collection.name",
       "settings": {
         "title": "we think you'll also love...",
