@@ -86,11 +86,12 @@
 
       .sticky-atc__image {
         flex: 0 0 auto;
-        width: 50px;
-        height: 50px;
-        border-radius: 6px;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
         overflow: hidden;
         background-color: var(--colorSmallImageBg, #f4f4f4);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .07);
       }
 
       .sticky-atc__image img {
@@ -109,7 +110,8 @@
 
       .sticky-atc__title {
         font-size: calc(var(--typeBaseSize, 16px) - 1px);
-        font-weight: 600;
+        font-weight: 400;
+        color: #5a5a5a;
         line-height: 1.25;
         white-space: nowrap;
         overflow: hidden;
@@ -120,18 +122,22 @@
       .sticky-atc__prices {
         display: flex;
         align-items: baseline;
-        gap: 8px;
-        font-size: calc(var(--typeBaseSize, 16px) - 2px);
+        gap: 9px;
         line-height: 1.2;
       }
 
-      .sticky-atc__price {
-        font-weight: 600;
+      /* Zelfde prijsopbouw als de productpagina en de cart: oude prijs klein en
+         grijs doorgestreept, nieuwe prijs groot en rood. */
+      .sticky-atc__compare {
+        color: #777777;
+        font-weight: 400;
+        font-size: calc(var(--typeBaseSize, 16px) - 3px);
       }
 
-      .sticky-atc__compare {
-        opacity: .6;
-        font-weight: 400;
+      .sticky-atc__price {
+        color: #A40303;
+        font-weight: 700;
+        font-size: calc(var(--typeBaseSize, 16px) + 3px);
       }
 
       .sticky-atc__compare[hidden] {
@@ -148,20 +154,18 @@
       .sticky-atc__select {
         appearance: none;
         -webkit-appearance: none;
-        border: 1px solid var(--colorBorder, #d9d9d9);
+        border: 1px solid #dedede;
         border-radius: var(--buttonRadius, 0);
         background-color: var(--colorBody, #fff);
-        color: inherit;
+        background-image: none;
+        color: #5a5a5a;
         font-family: inherit;
         font-size: calc(var(--typeBaseSize, 16px) - 2px);
         line-height: 1.2;
-        padding: 12px 34px 12px 14px;
-        max-width: 160px;
+        padding: 13px 16px;
+        max-width: 210px;
+        text-overflow: ellipsis;
         cursor: pointer;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23333' stroke-width='1.5'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        background-size: 11px 8px;
       }
 
       .sticky-atc__button {
@@ -211,6 +215,14 @@
           font-size: calc(var(--typeBaseSize, 16px) - 3px);
         }
 
+        .sticky-atc__price {
+          font-size: calc(var(--typeBaseSize, 16px) + 1px);
+        }
+
+        .sticky-atc__compare {
+          font-size: calc(var(--typeBaseSize, 16px) - 4px);
+        }
+
         .sticky-atc__select {
           display: none;
         }
@@ -249,13 +261,11 @@
         <div class="sticky-atc__info">
           <span class="sticky-atc__title">{{ product.title }}</span>
           <span class="sticky-atc__prices">
-            <span class="sticky-atc__price" data-sticky-price>{{ sticky_variant.price | money }}</span>
             <s
               class="sticky-atc__compare"
               data-sticky-compare
-              {% unless sticky_variant.compare_at_price > sticky_variant.price %}hidden{% endunless %}>
-              {{ sticky_variant.compare_at_price | money }}
-            </s>
+              {% unless sticky_variant.compare_at_price > sticky_variant.price %}hidden{% endunless %}>{{- sticky_variant.compare_at_price | money_with_currency -}}</s>
+            <span class="sticky-atc__price" data-sticky-price>{{ sticky_variant.price | money_with_currency }}</span>
           </span>
         </div>
 
@@ -310,9 +320,13 @@
         var buttonText = bar.querySelector('[data-sticky-button-text]');
         var selects = bar.querySelectorAll('[data-sticky-option]');
 
+        // De productpagina toont de prijs mét valuta ($49.95 AUD), dus de balk
+        // gebruikt hetzelfde formaat in plaats van theme.settings.moneyFormat.
+        var moneyFormat = {{ shop.money_with_currency_format | json }};
+
         function money(cents) {
           if (window.theme && theme.Currency && theme.Currency.formatMoney) {
-            return theme.Currency.formatMoney(cents, theme.settings && theme.settings.moneyFormat);
+            return theme.Currency.formatMoney(cents, moneyFormat);
           }
           return (cents / 100).toFixed(2);
         }
