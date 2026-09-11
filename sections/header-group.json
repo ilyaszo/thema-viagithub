@@ -17,6 +17,7 @@
         "header-0": {
           "type": "logo",
           "settings": {
+            "logo": "shopify://shop_images/clara_sydney_1640x924_0fb06d8e-b61e-4b47-8609-a2f156498848.png",
             "desktop_logo_width": 190,
             "mobile_logo_width": 150
           }
