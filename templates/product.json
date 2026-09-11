@@ -14,8 +14,9 @@
       "blocks": {
         "custom_cwm7xn": {
           "type": "custom",
+          "disabled": true,
           "settings": {
-            "code": "<div class=\"spacer-block\"></div>\n\n<style>\n  .spacer-block { height: 1px; }\n  @media (max-width: 749px) {\n    .spacer-block { height: 40px; }\n  }\n</style>"
+            "code": "<div class=\"spacer-block\"></div>\n\n<style>\n  .spacer-block { height: 0.2px; }\n  @media (max-width: 749px) {\n    .spacer-block { height: 40px; }\n  }\n</style>"
           }
         },
         "d96502fe-65de-478e-8671-66d784e17eed": {
