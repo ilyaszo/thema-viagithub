@@ -92,8 +92,8 @@
       </div>
 
       {%- comment -%}
-        Prijskolom: nieuwe prijs + doorgestreepte vanafprijs, daaronder het
-        bespaarde bedrag over de hele regel en een kortingsbadge.
+        Prijskolom: nieuwe prijs + doorgestreepte vanafprijs, met de
+        kortingsbadge daaronder.
       {%- endcomment -%}
       {%- liquid
         assign line_compare = 0
@@ -106,7 +106,6 @@
         assign has_compare = false
         if line_compare > 0
           assign has_compare = true
-          assign line_savings = line_compare | times: product.quantity | minus: product.final_line_price
           assign percent_off = line_compare | minus: product.final_price | times: 100 | divided_by: line_compare
         endif
       -%}
@@ -122,7 +121,6 @@
         </div>
 
         {%- if has_compare -%}
-          <div class="cart__price-save">(Save {{ line_savings | money }})</div>
           <div class="cart__price-badge">-{{ percent_off }}% OFF</div>
         {%- endif -%}
 

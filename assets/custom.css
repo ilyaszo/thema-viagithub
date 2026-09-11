@@ -472,15 +472,7 @@ button[class*="kiwi"],
   font-size: calc(var(--typeBaseSize) + 4px);
 }
 
-/* Bespaard bedrag over de hele regel */
-.cart__price-save {
-  font-weight: 700;
-  font-size: calc(var(--typeBaseSize) - 1px);
-  line-height: 1.2;
-  color: #1a1a1a;
-}
-
-/* Grijze kortingsbadge onder de besparing */
+/* Grijze kortingsbadge onder de prijs */
 .cart__price-badge {
   display: inline-block;
   background: #f1f1f1;
