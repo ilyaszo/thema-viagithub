@@ -442,11 +442,24 @@ button[class*="kiwi"],
 }
 
 /* ================================
-   CART: NIEUWE PRIJS GROTER + NAAST ELKAAR
+   CART: PRIJSKOLOM (prijs, besparing, badge)
 ================================ */
 
-/* Prijzen op één lijn, netjes uitgelijnd op de tekstbasis */
+/* Aantalkiezer en prijskolom bovenaan uitlijnen. */
+.cart__item .cart__item-sub {
+  align-items: flex-start;
+}
+
+/* Prijs, besparing en badge onder elkaar, rechts uitgelijnd. */
 .cart__item-price-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+/* Nieuwe prijs en doorgestreepte vanafprijs naast elkaar op de tekstbasis. */
+.cart__item-price-col .cart__price-row {
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
@@ -454,21 +467,30 @@ button[class*="kiwi"],
   gap: 8px;
 }
 
-/* Binnenste flex-div (geen-korting variant) mag niet dubbel gappen */
-.cart__item-price-col > div {
-  display: flex !important;
-  align-items: baseline;
-  gap: 8px !important;
-}
-
 /* Nieuwe prijs groter */
 .cart__item-price-col .cart__price:not(.cart__price--strikethrough) {
   font-size: calc(var(--typeBaseSize) + 4px);
 }
 
-/* Nieuwe prijs altijd vóór de oude prijs */
-.cart__item-price-col .cart__price--strikethrough {
-  order: 2;
+/* Bespaard bedrag over de hele regel */
+.cart__price-save {
+  font-weight: 700;
+  font-size: calc(var(--typeBaseSize) - 1px);
+  line-height: 1.2;
+  color: #1a1a1a;
+}
+
+/* Grijze kortingsbadge onder de besparing */
+.cart__price-badge {
+  display: inline-block;
+  background: #f1f1f1;
+  color: #6b6b6b;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  padding: 4px 7px;
+  border-radius: 4px;
 }
 
 /* ================================

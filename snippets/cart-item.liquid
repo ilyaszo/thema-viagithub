@@ -91,26 +91,40 @@
         </div>
       </div>
 
+      {%- comment -%}
+        Prijskolom: nieuwe prijs + doorgestreepte vanafprijs, daaronder het
+        bespaarde bedrag over de hele regel en een kortingsbadge.
+      {%- endcomment -%}
+      {%- liquid
+        assign line_compare = 0
+        if product.variant.compare_at_price > product.final_price
+          assign line_compare = product.variant.compare_at_price
+        elsif product.original_price > product.final_price
+          assign line_compare = product.original_price
+        endif
+
+        assign has_compare = false
+        if line_compare > 0
+          assign has_compare = true
+          assign line_savings = line_compare | times: product.quantity | minus: product.final_line_price
+          assign percent_off = line_compare | minus: product.final_price | times: 100 | divided_by: line_compare
+        endif
+      -%}
+
       <div class="cart__item-price-col text-right">
-        {% if product.original_price != product.final_price %}
-          <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
-          <small class="cart__price cart__price--strikethrough">
-            {{ product.original_price | money }}
-          </small>
-        
+        <div class="cart__price-row">
           <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
-          <span class="cart__price cart__discount">
-            {{ product.final_price | money }}
-          </span>
-          
-        {% else %}
-          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <span class="cart__price">
-            {{ product.original_price | money }}
-          </span>
-                <span class="cart__price cart__price--strikethrough" style="opacity: 0.65;">{{ product.original_price | times: 2 | money }}</span>
-          </div>
-        {% endif %}
+          <span class="cart__price">{{ product.final_price | money }}</span>
+          {%- if has_compare -%}
+            <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+            <span class="cart__price cart__price--strikethrough">{{ line_compare | money }}</span>
+          {%- endif -%}
+        </div>
+
+        {%- if has_compare -%}
+          <div class="cart__price-save">(Save {{ line_savings | money }})</div>
+          <div class="cart__price-badge">-{{ percent_off }}% OFF</div>
+        {%- endif -%}
 
         {%- if product.line_level_discount_allocations != blank -%}
           {%- for discount_allocation in product.line_level_discount_allocations -%}
