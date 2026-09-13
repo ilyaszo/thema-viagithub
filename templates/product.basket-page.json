@@ -221,6 +221,18 @@
         "product_video_style": "muted"
       }
     },
+    "featured_collection_zRnJ6y": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "You may also like",
+        "home_featured_products": "laundry-baskets",
+        "per_row": 5,
+        "rows": 2,
+        "mobile_scrollable": true,
+        "view_all": true,
+        "divider": false
+      }
+    },
     "testimonials_A6AWzA": {
       "type": "testimonials",
       "blocks": {
@@ -375,18 +387,6 @@
       "disabled": true,
       "settings": {
         "max_width": true
-      }
-    },
-    "featured_collection_zRnJ6y": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "You may also like",
-        "home_featured_products": "laundry-baskets",
-        "per_row": 5,
-        "rows": 2,
-        "mobile_scrollable": true,
-        "view_all": true,
-        "divider": false
       }
     },
     "product-recommendations": {
@@ -588,10 +588,10 @@
   },
   "order": [
     "main",
+    "featured_collection_zRnJ6y",
     "testimonials_A6AWzA",
     "testimonials_VJGQND",
     "sub",
-    "featured_collection_zRnJ6y",
     "product-recommendations",
     "3d8cbd23-153b-4970-9ecb-7f3332b05c60",
     "featured_collection_F9wgjc",
