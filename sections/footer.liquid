@@ -24,6 +24,21 @@
   {%- endstyle -%}
 {%- endif -%}
 
+{%- comment -%}
+  Laatste footerblok (nieuwsbrief/giveaway) tegen de rechterrand, zoals de referentie.
+{%- endcomment -%}
+{%- style -%}
+  @media only screen and (min-width: 960px) {
+    .site-footer .grid > .grid__item:last-child {
+      float: right;
+    }
+
+    html[dir='rtl'] .site-footer .grid > .grid__item:last-child {
+      float: left;
+    }
+  }
+{%- endstyle -%}
+
 <footer class="site-footer" data-section-id="{{ section.id }}" data-section-type="footer-section">
   <div class="page-width">
 
