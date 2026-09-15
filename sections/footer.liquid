@@ -39,6 +39,33 @@
   }
 {%- endstyle -%}
 
+{%- comment -%}
+  Betaal-iconen gecentreerd onderaan de footer, zoals de referentie.
+{%- endcomment -%}
+{%- style -%}
+  .site-footer .payment-icons {
+    clear: both;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 0;
+    padding-bottom: 10px;
+  }
+
+  .site-footer .payment-icons li {
+    display: inline-block;
+    margin: 4px 4px 0;
+    vertical-align: middle;
+  }
+
+  .site-footer .payment-icons li svg {
+    display: block;
+    height: 24px;
+    width: auto;
+  }
+{%- endstyle -%}
+
 <footer class="site-footer" data-section-id="{{ section.id }}" data-section-type="footer-section">
   <div class="page-width">
 
