@@ -410,13 +410,13 @@ button[class*="kiwi"],
   border-radius: 10px;
 }
 
-/* Iets groter in de drawer (was 100px) */
+/* Groter + staand formaat in de drawer (was 95x95) */
 .drawer .cart__image {
-  flex: 0 0 95px !important;
+  flex: 0 0 100px !important;
 }
 
 .drawer .cart__image a {
-  height: 95px !important;
+  height: 140px !important;
 }
 
 /* ================================
