@@ -69,6 +69,8 @@
             {% if additional_checkout_buttons and settings.cart_additional_buttons %}
               <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
             {% endif %}
+
+            {% render 'cart-payment-icons' %}
             
           </div>
 
